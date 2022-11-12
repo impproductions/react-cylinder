@@ -1,66 +1,74 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
+import CH from "../helpers/cylinderHelper";
 
-function Cylinder({ faces, height, children, diameter }) {
-    const side = Math.sin((Math.PI / (faces))) * diameter;
-    console.log(diameter, side);
-
+function Cylinder({ diameter, offsetCorrection = 4, children }) {
+    const faces = 50;
+    const side = CH.side(diameter, faces);
+    const perimeter = CH.perimeter(diameter, faces);
+    const innerSide = CH.innerSide(diameter, faces);
+    
     return (
-        <CylinderContainer w={diameter} h={height}>
-            <CylinderRotator>
+        <Holder>
+            <Container width={diameter}>
                 {
                     [...Array(faces)].map((v, i) => (
-                        <CylinderFace key={i} h={height} w={side} index={i} faces={faces} diameter={diameter} aria-hidden={i > 0 && true}>
-                            <FaceContent index={i} w={side}>
+                        <Face
+                            key={i}
+                            index={i}
+                            faces={faces}
+                            diameter={diameter}
+                            width={side}
+                            innerSide={innerSide}
+                            offsetCorrection={offsetCorrection}
+                        >
+                            <FaceContent
+                                index={i}
+                                perimeter={perimeter}
+                                width={side}
+                                aria-hidden={i > 0 && "true"}
+                            >
                                 {children}
                             </FaceContent>
-                        </CylinderFace>
+                        </Face>
                     ))
                 }
-            </CylinderRotator>
-        </CylinderContainer>
+            </Container>
+        </Holder>
     );
 }
 
-const FaceContent = styled.div`
-    transform: translateX(${({ index, w }) => Number(index) * -w}px);
+const FaceContent = styled.section.attrs(() => ({ "data-cylinder-face-content": "" }))`
+    transform: translateX(${props => props.index * -props.width}px);
+
+    &:first-child {
+        width: ${props => props.perimeter}px;
+    }
 `;
 
-const CylinderFace = styled.div`
-    position: absolute;
-    left: calc(50% - ${({ w }) => w / 2}px);
-    top: 0;
-    width: ${({ w }) => w}px;
+const Face = styled.div.attrs(() => ({ "data-cylinder-face": "" }))`
+    position: relative;
+    left: calc(50% - ${props => props.width / 2}px);
+    width: ${props => props.width}px;
     overflow: hidden;
-    /* background-color: red; */
-    /* border: 1px solid black; */
-    /* opacity: 0.7; */
-    transform: rotateY(${({ faces, index }) => 360 / faces * index}deg)  translateZ(${({ diameter, faces }) => Math.cos(Math.PI / faces) * (diameter / 2)}px);
+    transform: 
+        translateX(${props => -props.width * props.index}px)
+        rotateY(${props => 360 / props.faces * props.index}deg) 
+        translateZ(${props => props.innerSide - props.offsetCorrection}px);
 `;
 
-const spinAnimation = keyframes`
-    from {
-        transform: rotateY(0deg);
-    }
-    to {
-        transform: rotateY(360deg);
-    }
-`;
-
-const CylinderRotator = styled.div`
+const Holder = styled.div`
     transform-style: preserve-3d;
-    background-color: green;
-    animation: 10s linear 0s infinite;
-    animation-name: ${spinAnimation};
 `;
-const CylinderContainer = styled.div`
-    position: absolute;
-    top: calc(50% - ${({ h }) => h / 1.5}px);
-    /* border: 5px solid green; */
-    left: 50%;
-    min-width: ${({ w }) => w}px;
+
+const Container = styled.div`
+    min-width: ${props => props.width}px;
     transform-origin: bottom;
     transform-style: preserve-3d;
-    transform: rotateX(-20deg) rotateY(0)  translateY(50px) translateX(${({ w }) => -w / 2}px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;
+
+
 
 export default Cylinder;
