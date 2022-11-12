@@ -9,14 +9,12 @@ function App() {
 
   return (
     <main className="App">
-      <CylinderDisplay diameter={400} size={[500, 300]}>
-        <Banner>
+      <CylinderDisplay diameters={[400, 250, 500]}>
+        <BannerTop>
           <p>
             Typescript is better than Javascript is better than
           </p>
-        </Banner>
-      </CylinderDisplay>
-      <CylinderDisplay diameter={250} size={[500, 500]}>
+        </BannerTop>
         <ExampleArticle>
           <h1>Heading 1</h1>
           <img src={logo} alt="Logo" height="100" style={{ float: "right", margin: "0" }} />
@@ -47,12 +45,17 @@ function App() {
             </pre>
           </CodeBox>
         </ExampleArticle>
+        <BannerBottom>
+          <p>
+            One Ring to rule them all, One Ring to find them, One Ring to bring them all and in the darkness bind them &nbsp;
+          </p>
+        </BannerBottom>
       </CylinderDisplay>
     </main>
   );
 }
 
-const blinkBanner = keyframes`
+const blinkBannerTop = keyframes`
   from {
     text-shadow: 0 0 6px rgba(0, 170, 0,18);
     border-top: 5px solid rgba(0, 170, 0, 1);
@@ -67,7 +70,7 @@ const blinkBanner = keyframes`
   }
 `;
 
-const Banner = styled.article`
+const BannerTop = styled.article`
   font-size: 30pt;
   height: 70px;
   display: flex;
@@ -77,8 +80,24 @@ const Banner = styled.article`
   text-align-last: justify;
   background-color: rgba(0, 0, 0, 0.8);
   animation: 1s linear 0s infinite alternate;
-  animation-name: ${blinkBanner};
+  animation-name: ${blinkBannerTop};
   font-family: monospace;
+`;
+
+const BannerBottom = styled.article`
+  display: block;
+  background: linear-gradient(0deg, rgba(113,87,0,1) 0%, rgba(232,182,0,1) 42%, rgba(255,224,110,1) 55%, rgba(229,180,0,1) 67%, rgba(113,87,0,1) 100%);
+
+  & p {
+    font-size: 18pt;
+    text-align: justify;
+    text-align-last: justify;
+    letter-spacing: 0.2rem;
+    font-stretch: expanded;
+    font-family: cursive;
+    color: rgba(150,0,0,1);
+    text-shadow: 0px 0px 3px black;
+  }
 `;
 
 const ExampleArticle = styled.article`

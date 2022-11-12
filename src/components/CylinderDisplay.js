@@ -1,13 +1,21 @@
+import { Children } from "react";
 import styled, { keyframes } from "styled-components";
 import Cylinder from "./Cylinder";
 
-function CylinderDisplay({ faces, diameter, size, children }) {
+function CylinderDisplay({ diameters, children }) {
+    const childrenList = Children.toArray(children);
+
+    console.log(childrenList)
     return (
-        <Display size={size}>
+        <Display>
             <Rotator>
-                <Cylinder faces={faces} diameter={diameter} height={size[1]}>
-                    {children}
-                </Cylinder>
+                {childrenList.map((child, i) => {
+                    return (
+                        <Cylinder key={"cylinder" + i} diameter={diameters[i]}>
+                            {child}
+                        </Cylinder>
+                    )
+                })}
             </Rotator>
         </Display>
     );
@@ -26,18 +34,21 @@ const Rotator = styled.div`
     transform-style: preserve-3d;
     animation: 10s linear 0s infinite;
     animation-name: ${spinAnimation};
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
-
 const Display = styled.div`
-  height: ${({size}) => size[1]}px;
-  width: ${({size}) => size[0]}px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  perspective: 800px;
-  border: 1px solid black;
-  overflow: hidden;
-  background: radial-gradient(circle at 10% 20%, rgb(69, 86, 102) 0%, rgb(34, 34, 34) 90%);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    perspective: 800px;
+    overflow: hidden;
 `;
 
 export default CylinderDisplay;

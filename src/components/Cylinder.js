@@ -2,7 +2,8 @@ import styled from "styled-components";
 import CH from "../helpers/cylinderHelper";
 
 function Cylinder({ diameter, offsetCorrection = 4, children }) {
-    const faces = 50;
+    const isMobile = /Android|iPhone/i.test(navigator.userAgent);
+    const faces = !isMobile ? 40 : 25;
     const side = CH.side(diameter, faces);
     const perimeter = CH.perimeter(diameter, faces);
     const innerSide = CH.innerSide(diameter, faces);
