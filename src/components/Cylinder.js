@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import CH from "../helpers/cylinderHelper";
 
-function Cylinder({ diameter, offsetCorrection = 4, children }) {
+function Cylinder({ diameter, offsetCorrection = 4, children, ...restProps }) {
     const isMobile = /Android|iPhone/i.test(navigator.userAgent);
     const faces = !isMobile ? 40 : 25;
     const side = CH.side(diameter, faces);
     const perimeter = CH.perimeter(diameter, faces);
     const innerSide = CH.innerSide(diameter, faces);
-    
+
     return (
-        <Holder>
+        <Holder {...restProps}>
             <Container width={diameter}>
                 {
                     [...Array(faces)].map((v, i) => (

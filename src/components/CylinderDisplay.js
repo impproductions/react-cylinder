@@ -5,18 +5,17 @@ import Cylinder from "./Cylinder";
 function CylinderDisplay({ diameters, children }) {
     const childrenList = Children.toArray(children);
 
-    console.log(childrenList)
     return (
         <Display>
-            <Rotator>
+            <Column>
                 {childrenList.map((child, i) => {
                     return (
-                        <Cylinder key={"cylinder" + i} diameter={diameters[i]}>
+                        <Cylinder key={"cylinder-" + i} diameter={diameters[i]} className={i % 2 == 0 ? "rotate-cw" : "rotate-ccw"}>
                             {child}
                         </Cylinder>
                     )
                 })}
-            </Rotator>
+            </Column>
         </Display>
     );
 }
@@ -30,25 +29,33 @@ const spinAnimation = keyframes`
     }
 `;
 
-const Rotator = styled.div`
+const Column = styled.div`
     transform-style: preserve-3d;
-    animation: 10s linear 0s infinite;
-    animation-name: ${spinAnimation};
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    .rotate-cw {
+        animation: 10s linear 0s infinite reverse;
+        animation-name: ${spinAnimation};
+    }
+    
+    .rotate-ccw {
+        animation: 10s linear 0s infinite;
+        animation-name: ${spinAnimation};
+    }
 `;
 const Display = styled.div`
     height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     perspective: 800px;
     overflow: hidden;
+
 `;
 
 export default CylinderDisplay;
